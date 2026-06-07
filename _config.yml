@@ -1,0 +1,12 @@
+# GitHub Pages（Jekyll）設定 — 参照アプリ「アテンドコ」と同じ Cayman テーマ構成
+title: 地図どこ＋ プライバシーポリシー
+description: 絵地図・案内図にGPS現在地を重ねるiOSアプリ「地図どこ＋」のプライバシーポリシー
+theme: jekyll-theme-cayman
+lang: ja
+
+# ▼ リポジトリ作成後、自分の GitHub Pages の URL に合わせて差し替えてください。
+#   例）GitHubユーザー名が bobshiro、リポジトリ名が chizudoko-privacy の場合：
+#       url:     https://bobshiro.github.io
+#       baseurl: /chizudoko-privacy
+url: https://bobshiro.github.io
+baseurl: /chizudoko-privacy
