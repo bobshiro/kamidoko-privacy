@@ -130,6 +130,72 @@ h3 + p {
   color: #5b4a3a;
 }
 
+// ユースケース・カードグリッド（index.md）
+.usecase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.usecase-card {
+  background: #fffaf2;
+  border: 1px solid #f0d9a8;
+  border-radius: 10px;
+  padding: 18px 20px;
+
+  h3 {
+    margin-top: 0;
+    color: #4a3a2c;
+    font-size: 1.1em;
+    border-bottom: none;
+  }
+
+  p {
+    margin-bottom: 0;
+    color: #5b4a3a;
+    font-size: 0.95em;
+    line-height: 1.6;
+  }
+}
+
+// 使い方ステップカード
+.step-card {
+  background: #fff;
+  border: 1px solid #f0d9a8;
+  border-left: 6px solid #e67e22;
+  border-radius: 10px;
+  padding: 18px 24px;
+  margin: 14px 0;
+
+  h3 {
+    margin-top: 0;
+    color: #b65406;
+    border-bottom: none;
+    font-size: 1.15em;
+  }
+
+  p {
+    margin-bottom: 0;
+    color: #5b4a3a;
+    line-height: 1.7;
+  }
+}
+
+// App Store ダウンロードカード
+.appstore-card {
+  background: #4a3a2c;
+  color: #fff7e6;
+  text-align: center;
+  padding: 20px 24px;
+  border-radius: 10px;
+  margin: 24px 0;
+
+  p {
+    margin: 0;
+  }
+}
+
 // 表（パス料金等）
 table {
   border-collapse: collapse;

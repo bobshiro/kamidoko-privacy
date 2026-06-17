@@ -1,22 +1,30 @@
-# 紙マップでどこ？ プライバシーポリシー
+# 紙マップでどこ？ 公式ページ
 
-iOSアプリ「紙マップでどこ？」のプライバシーポリシーを GitHub Pages で公開するためのファイル一式です。
-参照アプリ「アテンドコ」と同じ Jekyll Cayman テーマ構成になっています。
+iOSアプリ「紙マップでどこ？」の公式 GitHub Pages 用ファイル一式。
+Jekyll の Cayman テーマをベースに、ウォーム配色のカスタム CSS で装飾しています。
 
-## 公開手順
+## ページ構成
 
-1. GitHub で新しいリポジトリを作成します（例: `kamidoko-privacy`、Public）。
-2. このフォルダの中身（`_config.yml` / `index.md` / `README.md`）をリポジトリにアップロードします。
-3. リポジトリの **Settings → Pages** で、Source を「Deploy from a branch」、Branch を `main` / `(root)` に設定します。
-4. 数分後、`https://<ユーザー名>.github.io/<リポジトリ名>/` で公開されます。
+| URL | ファイル | 用途 |
+|---|---|---|
+| `/kamidoko/` | `index.md` | アプリ紹介・使い方 |
+| `/kamidoko/support.html` | `support.md` | サポート・FAQ（ASC Support URL） |
+| `/kamidoko/privacy.html` | `privacy.md` | プライバシーポリシー（ASC Privacy URL） |
 
-## 公開前に差し替えるところ
+## 公開 URL
 
-- **連絡先メール**: ~~`index.md` の2箇所（「1. 提供者」と「12. お問い合わせ」）にある `your-address@example.com`~~ → 2026-06-17 `kamidoko@biz.nifty.jp` に差し替え済
-- **URL**: `_config.yml` の `url` / `baseurl` を、作成したリポジトリに合わせて変更
+- アプリ紹介: <https://bobshiro.github.io/kamidoko/>
+- サポート: <https://bobshiro.github.io/kamidoko/support.html>
+- プライバシーポリシー: <https://bobshiro.github.io/kamidoko/privacy.html>
 
-## アプリ側の最後の作業
+## ファイル
 
-公開 URL が確定したら、Xcode プロジェクトの `Sources/LegalLinks.swift` にある
-`privacyURL` を、この公開 URL へ差し替えてください
-（自動更新サブスクのため、App Review では別途「利用規約（EULA）」の URL も必要です）。
+- `index.md` — アプリ紹介・使い方トップページ
+- `support.md` — サポート・FAQ ページ
+- `privacy.md` — プライバシーポリシー本文
+- `_config.yml` — Jekyll 設定（theme: cayman、baseurl: /kamidoko）
+- `assets/css/style.scss` — Cayman テーマの上書き CSS（フッター/ヘッダー非表示・ウォーム配色カード）
+
+## デプロイ
+
+main ブランチに push すると GitHub Pages が自動でリビルドし、1〜3 分で反映されます。
