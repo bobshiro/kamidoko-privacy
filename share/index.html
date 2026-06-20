@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>紙どこに招待されました</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: #FBF6E8;
+    color: #4A3A2C;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+  .card {
+    background: #FFFDF8;
+    border-radius: 24px;
+    padding: 32px 24px;
+    width: 100%;
+    max-width: 480px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 24px rgba(74, 58, 44, 0.08);
+    text-align: center;
+  }
+  .logo {
+    font-size: 13px;
+    font-weight: 700;
+    color: #F0592B;
+    letter-spacing: 0.1em;
+    margin: 0 0 18px;
+  }
+  h1 {
+    font-size: 21px;
+    margin: 0 0 8px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .map-name {
+    color: #F0592B;
+    word-break: break-word;
+  }
+  .sub {
+    color: #9B8E7D;
+    font-size: 14px;
+    margin: 0 0 28px;
+  }
+  .btn {
+    display: inline-block;
+    background: #F0592B;
+    color: #FFFFFF;
+    padding: 14px 36px;
+    border-radius: 16px;
+    font-size: 17px;
+    font-weight: 700;
+    text-decoration: none;
+    min-width: 200px;
+    box-sizing: border-box;
+  }
+  .btn:active { opacity: 0.85; }
+  .spinner {
+    color: #9B8E7D;
+    font-size: 13px;
+    margin: 18px 0 0;
+  }
+  .fallback {
+    display: none;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid #EFE7DA;
+    color: #9B8E7D;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .fallback a {
+    color: #F0592B;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .fallback.show { display: block; }
+  .error {
+    color: #C44; font-size: 14px; margin: 12px 0 0;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <p class="logo">紙どこ</p>
+    <h1 id="title">招待を読み込んでいます…</h1>
+    <p class="sub" id="sub">少しお待ちください</p>
+    <a id="open" class="btn" style="display:none">紙どこで開く</a>
+    <p class="spinner" id="spinner" style="display:none">アプリを開いています…</p>
+    <p class="error" id="error" style="display:none"></p>
+    <div class="fallback" id="fallback">
+      <p>
+        紙どこアプリがインストールされていない場合は<br>
+        <a href="https://apps.apple.com/jp/app/kamidoko">App Store からダウンロード</a>
+      </p>
+      <p style="margin-top:14px;">
+        うまく開けないときは下のボタンから手動で起動してください。
+      </p>
+    </div>
+  </div>
+
+<script>
+(function() {
+  // URL fragment (`#u=...&n=...`) から取り出す。fragment はサーバへ送信されない (プライバシー)。
+  function parseHash() {
+    var raw = location.hash.replace(/^#/, '');
+    var out = {};
+    raw.split('&').forEach(function(kv) {
+      var i = kv.indexOf('=');
+      if (i < 0) return;
+      var k = decodeURIComponent(kv.slice(0, i));
+      var v = decodeURIComponent(kv.slice(i + 1));
+      if (k) out[k] = v;
+    });
+    return out;
+  }
+
+  function escapeHTML(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  var params = parseHash();
+  var icloudURL = params.u;
+  var mapName = params.n;
+
+  var titleEl = document.getElementById('title');
+  var subEl = document.getElementById('sub');
+  var openEl = document.getElementById('open');
+  var spinnerEl = document.getElementById('spinner');
+  var errorEl = document.getElementById('error');
+  var fallbackEl = document.getElementById('fallback');
+
+  if (!icloudURL) {
+    titleEl.textContent = 'リンクが正しくありません';
+    subEl.style.display = 'none';
+    errorEl.textContent = '招待リンクの内容が読み取れませんでした。送信元に再送をお願いしてください。';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  // タイトルを差し替え。マップ名があれば「「○○」に招待されました」、なければ「紙どこに招待されました」。
+  if (mapName && mapName.length > 0) {
+    titleEl.innerHTML =
+      '<span class="map-name">「' + escapeHTML(mapName) + '」</span><br>に招待されました';
+  } else {
+    titleEl.textContent = '紙どこに招待されました';
+  }
+  subEl.textContent = '共有マップに参加します';
+
+  // kamidoko-app://share?u=<icloud-url> を組み立てる。custom scheme は LINE/Safari の
+  // WebView を OS-level URL handler 経路へ脱出させるための鍵。
+  var schemeURL = 'kamidoko-app://share?u=' + encodeURIComponent(icloudURL);
+
+  openEl.href = schemeURL;
+  openEl.style.display = 'inline-block';
+  spinnerEl.style.display = 'block';
+
+  // 一瞬タイトル/マップ名を視認させてから自動転送（タップ不要）。600ms ≒ 認知できる短さ。
+  setTimeout(function() {
+    location.replace(schemeURL);
+  }, 600);
+
+  // 紙どこ未インストールだと自動転送が無音で失敗する。2.4s 経っても遷移しなければ手動ボタン
+  // と App Store fallback を表示してユーザーに次の行動を提示。
+  setTimeout(function() {
+    spinnerEl.textContent = 'アプリが起動しない場合は下のボタンを押してください';
+    fallbackEl.classList.add('show');
+  }, 2400);
+})();
+</script>
+</body>
+</html>
