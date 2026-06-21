@@ -84,12 +84,10 @@
     margin: 18px 0 0;
   }
   .fallback {
-    display: none;
     margin-top: 26px;
     padding-top: 22px;
     border-top: 1px solid #EFE7DA;
   }
-  .fallback.show { display: block; }
   .fallback p {
     color: #6B5B49;
     font-size: 13px;
@@ -132,16 +130,16 @@
   <div class="card">
     <div class="brand">
       <img class="app-icon" src="app-icon.png" alt="紙どこ アプリアイコン" width="76" height="76">
-      <p class="logo">紙どこ</p>
+      <p class="logo">紙マップでどこ？</p>
     </div>
     <h1 id="title">招待を読み込んでいます…</h1>
     <p class="sub" id="sub">少しお待ちください</p>
-    <a id="open" class="btn" style="display:none">紙どこで開く</a>
+    <a id="open" class="btn" style="display:none">アプリで開く</a>
     <p class="spinner" id="spinner" style="display:none">アプリを開いています…</p>
     <p class="error" id="error" style="display:none"></p>
-    <div class="fallback" id="fallback">
+    <div class="fallback">
       <p>
-        紙どこアプリがインストールされていない可能性があります。<br>
+        紙マップでどこ？ アプリがインストールされていない場合は<br>
         下のボタンからインストールしてください。
       </p>
       <a href="https://apps.apple.com/jp/app/kamidoko" aria-label="App Store からダウンロード">
@@ -190,7 +188,6 @@
   var openEl = document.getElementById('open');
   var spinnerEl = document.getElementById('spinner');
   var errorEl = document.getElementById('error');
-  var fallbackEl = document.getElementById('fallback');
 
   if (!icloudURL) {
     titleEl.textContent = 'リンクが正しくありません';
@@ -222,11 +219,10 @@
     location.replace(schemeURL);
   }, 600);
 
-  // 紙どこ未インストールだと自動転送が無音で失敗する。2.4s 経っても遷移しなければ
-  // 「App Store からインストール」セクションを表示。スピナー文言も合わせて差し替える。
+  // 2026-06-21: App Store fallback は最初から表示するようにしたので、ここでは
+  // 「自動転送が効かなかった場合の追加アナウンス」だけスピナーに差し替える。
   setTimeout(function() {
-    spinnerEl.textContent = '自動で開けなかったときは、上の「紙どこで開く」ボタンをもう一度押してみてください。';
-    fallbackEl.classList.add('show');
+    spinnerEl.textContent = '自動で開けなかったときは、上の「アプリで開く」ボタンをもう一度押してみてください。';
   }, 2400);
 })();
 </script>
