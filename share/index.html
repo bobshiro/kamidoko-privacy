@@ -22,19 +22,33 @@
   .card {
     background: #FFFDF8;
     border-radius: 24px;
-    padding: 32px 24px;
+    padding: 28px 24px 22px;
     width: 100%;
     max-width: 480px;
     box-sizing: border-box;
     box-shadow: 0 4px 24px rgba(74, 58, 44, 0.08);
     text-align: center;
   }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .app-icon {
+    width: 76px;
+    height: 76px;
+    border-radius: 17px;  /* iOS 風 squircle 近似 */
+    box-shadow: 0 2px 8px rgba(74, 58, 44, 0.15);
+    display: block;
+  }
   .logo {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 700;
     color: #F0592B;
-    letter-spacing: 0.1em;
-    margin: 0 0 18px;
+    letter-spacing: 0.12em;
+    margin: 0;
   }
   h1 {
     font-size: 21px;
@@ -49,7 +63,7 @@
   .sub {
     color: #9B8E7D;
     font-size: 14px;
-    margin: 0 0 28px;
+    margin: 0 0 26px;
   }
   .btn {
     display: inline-block;
@@ -71,27 +85,55 @@
   }
   .fallback {
     display: none;
-    margin-top: 28px;
+    margin-top: 26px;
     padding-top: 22px;
     border-top: 1px solid #EFE7DA;
-    color: #9B8E7D;
-    font-size: 13px;
-    line-height: 1.7;
-  }
-  .fallback a {
-    color: #F0592B;
-    font-weight: 700;
-    text-decoration: none;
   }
   .fallback.show { display: block; }
+  .fallback p {
+    color: #6B5B49;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0 0 14px;
+  }
+  .appstore-badge {
+    display: inline-block;
+    /* Apple ガイドライン: バッジ高さ 40px 推奨 (本サイトでは画面に合わせ 48px) */
+    height: 48px;
+    width: auto;
+  }
   .error {
     color: #C44; font-size: 14px; margin: 12px 0 0;
+  }
+  .footer {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid #EFE7DA;
+    font-size: 11px;
+    line-height: 1.8;
+    color: #9B8E7D;
+  }
+  .footer a {
+    color: #9B8E7D;
+    text-decoration: none;
+  }
+  .footer a:hover { color: #F0592B; }
+  .footer .sep {
+    margin: 0 6px;
+    color: #D8CFC0;
+  }
+  .footer .mail {
+    display: block;
+    margin-top: 6px;
   }
 </style>
 </head>
 <body>
   <div class="card">
-    <p class="logo">紙どこ</p>
+    <div class="brand">
+      <img class="app-icon" src="app-icon.png" alt="紙どこ アプリアイコン" width="76" height="76">
+      <p class="logo">紙どこ</p>
+    </div>
     <h1 id="title">招待を読み込んでいます…</h1>
     <p class="sub" id="sub">少しお待ちください</p>
     <a id="open" class="btn" style="display:none">紙どこで開く</a>
@@ -99,12 +141,19 @@
     <p class="error" id="error" style="display:none"></p>
     <div class="fallback" id="fallback">
       <p>
-        紙どこアプリがインストールされていない場合は<br>
-        <a href="https://apps.apple.com/jp/app/kamidoko">App Store からダウンロード</a>
+        紙どこアプリがインストールされていない可能性があります。<br>
+        下のボタンからインストールしてください。
       </p>
-      <p style="margin-top:14px;">
-        うまく開けないときは下のボタンから手動で起動してください。
-      </p>
+      <a href="https://apps.apple.com/jp/app/kamidoko" aria-label="App Store からダウンロード">
+        <img class="appstore-badge" src="appstore-badge-ja.svg" alt="App Store からダウンロード" height="48">
+      </a>
+    </div>
+    <div class="footer">
+      <a href="https://kamidoko.github.io/">アプリ紹介</a><span class="sep">·</span>
+      <a href="https://kamidoko.github.io/support.html">FAQ</a><span class="sep">·</span>
+      <a href="https://kamidoko.github.io/privacy.html">プライバシー</a><span class="sep">·</span>
+      <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">利用規約</a>
+      <a class="mail" href="mailto:kamidoko@biz.nifty.jp?subject=%E7%B4%99%E3%83%9E%E3%83%83%E3%83%97%E3%81%A7%E3%81%A9%E3%81%93%EF%BC%9F%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">kamidoko@biz.nifty.jp</a>
     </div>
   </div>
 
@@ -173,10 +222,10 @@
     location.replace(schemeURL);
   }, 600);
 
-  // 紙どこ未インストールだと自動転送が無音で失敗する。2.4s 経っても遷移しなければ手動ボタン
-  // と App Store fallback を表示してユーザーに次の行動を提示。
+  // 紙どこ未インストールだと自動転送が無音で失敗する。2.4s 経っても遷移しなければ
+  // 「App Store からインストール」セクションを表示。スピナー文言も合わせて差し替える。
   setTimeout(function() {
-    spinnerEl.textContent = 'アプリが起動しない場合は下のボタンを押してください';
+    spinnerEl.textContent = '自動で開けなかったときは、上の「紙どこで開く」ボタンをもう一度押してみてください。';
     fallbackEl.classList.add('show');
   }, 2400);
 })();
