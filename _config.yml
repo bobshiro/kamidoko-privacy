@@ -8,5 +8,11 @@ lang: ja
 # user-page repo（リポ名=オーナー名.github.io）なので baseurl 無しのルート公開。
 # 旧: bobshiro.github.io/kamidoko/...
 # 新: kamidoko.github.io/...
+#
+# ⚠️ baseurl は **必ず ""（空文字）のままにする**。user-page repo はルート公開で
+#    サブパスを持たない。`/kamidoko` 等を入れると site.baseurl 依存の内部リンクが
+#    /kamidoko/kamidoko/... のように二重に解決され、全 navigation リンクが 404 になる。
+#    旧 bobshiro/kamidoko (project-page repo) は逆に `baseurl: /kamidoko` が必要だった
+#    ので、git pull した時に間違って戻さないこと。
 url: https://kamidoko.github.io
 baseurl: ""
